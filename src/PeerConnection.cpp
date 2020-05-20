@@ -129,13 +129,14 @@ namespace mediasoupclient
 	{
 		MSC_TRACE();
 
-		webrtc::RTCError error = this->pc->SetConfiguration(config);
-
-		if (error.ok())
+		webrtc::RTCError error = webrtc::RTCError::OK();
+		bool succFlag = this->pc->SetConfiguration(config);
+                
+		if (succFlag)
 		{
 			return true;
 		}
-
+ 		error.set_type(webrtc::RTCErrorType::UNSUPPORTED_OPERATION);
 		MSC_WARN(
 		  "webrtc::PeerConnection::SetConfiguration failed [%s:%s]",
 		  webrtc::ToString(error.type()),
